@@ -23,6 +23,8 @@ INSERT INTO Musician(name)
 VALUES('Rainbow');
 INSERT INTO Musician(name) 
 VALUES('Ария');
+INSERT INTO Musician(name) 
+VALUES('Тест_исполнитель');
 
 INSERT INTO 
 	MusicianGenre(musician_id,genre_id) 
@@ -63,6 +65,10 @@ INSERT INTO
 INSERT INTO 
 	MusicianGenre(musician_id,genre_id) 
 	(select musician_id,(select genre_id from Genre where name='Рок') from Musician where name='Ария');
+
+INSERT INTO 
+	MusicianGenre(musician_id,genre_id) 
+	(select musician_id,(select genre_id from Genre where name='Рок') from Musician where name='Тест_исполнитель');
 
 INSERT INTO Album(name,release_year)
 VALUES('Камнем по голове', 1996);
@@ -267,6 +273,49 @@ INSERT INTO
 INSERT INTO 
 	Track(name,duration, album_id) 
 	(select 'Там высоко', 337,album_id from Album where name='Крещение огнём');
+
+
+INSERT INTO Album(name,release_year)
+VALUES('Тест_альбом', 2020);
+
+INSERT INTO 
+	AlbumMusician(album_id ,musician_id) 
+	(SELECT album_id,(SELECT musician_id FROM Musician WHERE name='Тест_исполнитель') FROM Album WHERE name='Тест_альбом');
+
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'my own', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'own my', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'my', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'oh my god', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'myself', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'by myself', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'bemy self', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'myself by', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'by myself by', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'beemy', 337,album_id from Album where name='Тест_альбом');
+INSERT INTO 
+	Track(name,duration, album_id) 
+	(select 'premyne', 337,album_id from Album where name='Тест_альбом');
+
 
 INSERT INTO Collection(name,release_year) 
 VALUES('Рок хиты', 2022);

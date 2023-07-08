@@ -23,9 +23,13 @@ WHERE position(' ' IN m.name) = 0;
 
 --Название треков, которые содержат слово «мой» или «my».
 
+/* На доработку
 SELECT name FROM Track t  
 WHERE lower(t.name) LIKE '%my%' OR lower(t.name) LIKE '%мой%';
+*/
 
+SELECT name FROM Track -- Корректный вариант
+WHERE string_to_array(lower(name), ' ') && ARRAY['my', 'мой']; --Преобразуем название трека в нижний регистр, разбиваем строку на пробелы, получая массив (список) слов, и делаем пересечение с нужным массивом слов (используем `string_to_array`, `lower`).
 
 --Количество исполнителей в каждом жанре.
 
@@ -35,11 +39,16 @@ GROUP BY g.name;
 
 
 --Количество треков, вошедших в альбомы 2019–2020 годов.
-
+/* По альбомам
 SELECT Album.name, COUNT(Track.name) Track FROM Album
 LEFT JOIN Track ON Album.album_id=Track.album_id 
 WHERE Album.release_year >= 2019 AND Album.release_year <= 2020
 GROUP BY Album.name;
+*/
+
+SELECT COUNT(Track.track_id) FROM Track -- Корректный вариант
+JOIN Album ON Album.album_id=Track.album_id /* Делаем объединение от таблицы треков к альбомам */
+WHERE Album.release_year BETWEEN 2019 AND 2020; /* Где год альбома находится в требуемом промежутке */
 
 
 --Средняя продолжительность треков по каждому альбому.
@@ -50,13 +59,23 @@ GROUP BY Album.name;
 
 
 --Все исполнители, которые не выпустили альбомы в 2020 году.
-
+/* На доработку
 SELECT Musician.name FROM Musician
 LEFT JOIN Albummusician ON Albummusician.musician_id =Musician.musician_id 
 LEFT JOIN Album ON Album.album_id = Albummusician.album_id 
 WHERE Album.release_year != 2020
 GROUP BY musician.name;
+*/
 
+SELECT Musician.name -- Корректный вариант
+FROM Musician  /* Из таблицы исполнителей */
+WHERE Musician.name NOT IN ( /* Где имя исполнителя не входит в вложенную выборку */
+    SELECT Musician.name /* Получаем имена исполнителей */
+    FROM Musician /* Из таблицы исполнителей */
+    JOIN Albummusician ON Albummusician.musician_id =Musician.musician_id /* Объединяем с промежуточной таблицей */
+    JOIN Album ON Album.album_id = Albummusician.album_id /* Объединяем с таблицей альбомов */
+    WHERE Album.release_year = 2020 /* Где год альбома равен 2020 */
+);
 
 --Названия сборников, в которых присутствует конкретный исполнитель (выберите его сами).
 
